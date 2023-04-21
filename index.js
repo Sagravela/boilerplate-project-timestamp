@@ -24,6 +24,30 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+// get method to plot date json
+app.get("/api/:date?", function(req, res) {
+  let inputDate = req.params.date;
+  if (!inputDate) {
+    inputDate = new Date();
+  }
+  
+  if (/\d{8,}/.test(inputDate)) {
+    let dateInt = parseInt(inputDate);
+    let date = new Date(dateInt);
+    if (date == 'Invalid Date') {
+      res.json({ status: 'Invalid Date'});
+    } else {
+      res.json({ unix: dateInt, utc: date.toUTCString() }); 
+    }
+  } else {
+    let date = new Date(inputDate);
+    if (date == 'Invalid Date') {
+      res.json({ error : 'Invalid Date'});
+    } else {
+      res.json({ unix: date.valueOf(), utc: date.toUTCString() });
+    }
+  }
+});
 
 
 // listen for requests :)
